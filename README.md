@@ -27,8 +27,8 @@ docker-compose-expense/
 docker compose up -d --build
 ```
 
-* **Swagger API 互動測試介面**：`http://localhost:8000/docs`
-* **查詢所有記帳紀錄**：`http://localhost:8000/expenses`
+* **Swagger API 互動測試介面**：`http://localhost:8030/docs`
+* **查詢所有記帳紀錄**：`http://localhost:8030/expenses`
 
 ---
 
