@@ -5,7 +5,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-from src.Expense import Base, Expense
+from src.expense import Base, Expense
 
 # 從環境變數讀取資料庫連線字串
 # 注意主機名稱是 "db"（對應 docker-compose.yml 裡的服務名稱，而非 localhost！）
