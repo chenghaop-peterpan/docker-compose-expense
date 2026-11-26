@@ -1,11 +1,11 @@
 import os
 import time
-from datetime import datetime
 from typing import Optional
 from fastapi import FastAPI, Depends, HTTPException
 from pydantic import BaseModel
-from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
-from sqlalchemy.orm import declarative_base, sessionmaker, Session
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, Session
+from src.Expense import Base, Expense
 
 # 從環境變數讀取資料庫連線字串
 # 注意主機名稱是 "db"（對應 docker-compose.yml 裡的服務名稱，而非 localhost！）
@@ -16,18 +16,6 @@ DATABASE_URL = os.getenv(
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
-
-
-# 定義資料庫資料表結構
-class Expense(Base):
-    __tablename__ = "expenses"
-
-    id = Column(Integer, primary_key=True, index=True)
-    item = Column(String, nullable=False)        # 消費項目
-    amount = Column(Float, nullable=False)       # 金額
-    category = Column(String, default="一般")     # 分類
-    created_at = Column(DateTime, default=datetime.now)
 
 
 # 等待資料庫就緒並自動建立資料表
