@@ -23,7 +23,7 @@ services:
     container_name: expense-api
     restart: always
     ports:
-      - "8000:8000"
+      - "8030:8030"
     environment:
       # 關鍵觀念：在同一個 Compose 網路內，直接用服務名稱 "db" 當作 Hostname 連線！
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
