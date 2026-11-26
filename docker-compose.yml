@@ -1,0 +1,37 @@
+services:
+  # 服務 1：PostgreSQL 關聯式資料庫
+  db:
+    image: postgres:16-alpine
+    container_name: expense-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      # 將資料庫核心資料目錄掛載到名為 postgres_data 的 Docker Volume
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 服務 2：FastAPI 後端應用程式
+  api:
+    build: .
+    container_name: expense-api
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      # 關鍵觀念：在同一個 Compose 網路內，直接用服務名稱 "db" 當作 Hostname 連線！
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    depends_on:
+      db:
+        # 確保資料庫真正通過健康檢查後，才啟動後端 API
+        condition: service_healthy
+
+# 宣告具名資料卷（Named Volume），即使容器被刪除，資料仍由 Docker 獨立保存
+volumes:
+  postgres_data:
